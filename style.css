@@ -78,8 +78,10 @@ button {
 #lista {
     width: 80%;
     position: relative;
-    height: 40%;
+    height: 40vh;
     overflow-y: auto;
+    display: flex;
+    justify-content: center;
 }
 
 
@@ -101,7 +103,14 @@ button {
 li {
     list-style: none;
     margin: 10px 0px;
+    display: flex;
+    justify-content: center;
 
+}
+
+ul {
+
+    width: 80%;
 }
 
 label {
@@ -138,15 +147,43 @@ input[type="checkbox"]:checked+label::before {
 }
 
 
-#barra {
-    display: absolute;
-}
+
 
 
 
 /*barra de progreso */
+#barra {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+}
+
 p {
     font-family: 'Mukta', sans-serif;
     font-weight: 900;
     letter-spacing: 5px;
+}
+
+progress {
+    accent-color: #6abb1a;
+    background-color: #457a11;
+    appearance: none;
+
+    max-width: 100%;
+    border-radius: 2em;
+
+}
+
+progress::-webkit-progress-bar {
+    background-color: #457a11;
+    border-radius: 2em;
+
+
+}
+
+progress::-webkit-progress-value {
+    border-radius: 2em;
+    background-color: #6abb1a;
+    ;
+
 }
