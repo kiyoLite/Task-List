@@ -1,31 +1,52 @@
-const TextoInput = document.querySelector('input[type="text"]') as HTMLInputElement
-const BotonAnadir = document.getElementById('anexar') as HTMLButtonElement
-const BarraProgreso = document.getElementsByTagName('progress')
-const TextBarra = document.querySelector('p')!
-const UlElement = document.querySelector('ul')!
+const TextoInput = document.querySelector('input[type="text"]') as HTMLInputElement | null
+const BotonAnadir = document.getElementById('anexar') as HTMLButtonElement | null
+const BarraProgreso = document.querySelector('progress') as HTMLProgressElement | null
+const TextBarra = document.querySelector('p') as HTMLParagraphElement | null
+const UlElement = document.querySelector('ul') as HTMLUListElement | null
 let contador1: number = 0
-let AllCheck = document.getElementsByClassName('allcheck')!
+let AllCheck = document.getElementsByClassName('allcheck') as HTMLCollectionOf<HTMLInputElement>
 
+let porcentaje = () => {
+    if (BarraProgreso && TextBarra && AllCheck) {
+        let barraValor: number = +BarraProgreso.getAttribute('value')!
+        let aumentarValorBarra: number | undefined
+        aumentarValorBarra = clearInterval(aumentarValorBarra)
 
-
-var porcentaje = () => {
-    let contadorCheck = 0
-    for (let i = 0; i < AllCheck.length; i++) {
-        if ((AllCheck[i] as HTMLInputElement).checked === true) {
-            contadorCheck++
+        let contadorCheck: number = 0
+        for (let i: number = 0; i < AllCheck.length; i++) {
+            if (AllCheck[i].checked === true) {
+                contadorCheck++
+            }
+        }
+        let CantidadChecked: number = Math.floor((contadorCheck / (AllCheck.length)) * 100)
+        TextBarra.textContent = CantidadChecked.toString() + '%'
+        let PorcentajeToNumber: number = Math.floor((contadorCheck / AllCheck.length) * 100)
+        if (barraValor < PorcentajeToNumber) {
+            aumentarValorBarra = setInterval(() => {
+                barraValor++
+                BarraProgreso.setAttribute('value', barraValor.toString())
+                if (barraValor == PorcentajeToNumber) {
+                    clearInterval(aumentarValorBarra)
+                }
+            }, 100)
+        }
+        else if (barraValor > PorcentajeToNumber) {
+            aumentarValorBarra = setInterval(() => {
+                barraValor--
+                BarraProgreso.setAttribute('value', barraValor.toString())
+                if (barraValor == PorcentajeToNumber) {
+                    clearInterval(aumentarValorBarra)
+                }
+            }, 100)
+        }
+        else {
+            clearInterval(aumentarValorBarra)
         }
     }
-    let CantidadChecked = Math.floor((contadorCheck / (AllCheck.length)) * 100)
-    TextBarra.textContent = CantidadChecked.toString() + '%'
-
-
 }
 
-
-
 const FuncionPrincipal = (): void => {
-
-    if (TextoInput.value.trim() !== "") {
+    if (TextoInput && UlElement && TextoInput.value.trim() !== "") {
         const CrearLi = document.createElement('li')
         UlElement.insertAdjacentElement('afterbegin', CrearLi)
         const DivPrincipal = document.createElement('div')
@@ -53,25 +74,25 @@ const FuncionPrincipal = (): void => {
         IconoBasura.classList.add('fa-trash')
         BotonEliminar.insertAdjacentElement('afterbegin', IconoBasura)
         TextoInput.value = ""
-        // BotonEliminar.addEventListener('click', porcentaje)
         BotonEliminar.addEventListener('click', () => {
-            UlElement.removeChild(CrearLi)
+            if (UlElement && CrearLi) {
+                UlElement.removeChild(CrearLi)
+                porcentaje()
+            }
         })
         InputCheckbox.addEventListener('click', porcentaje)
         contador1++
     }
 }
 
+if (BotonAnadir && TextoInput) {
+    BotonAnadir.addEventListener('click', FuncionPrincipal)
+    BotonAnadir.addEventListener('click', porcentaje)
 
-
-
-BotonAnadir.addEventListener('click', FuncionPrincipal)
-BotonAnadir.addEventListener('click', porcentaje)
-
-TextoInput.addEventListener('keydown', (e) => {
-    if (e.key == "Enter") {
-        FuncionPrincipal();
-        porcentaje();
-
-    }
-})
+    TextoInput.addEventListener('keydown', (e) => {
+        if (e.key == "Enter") {
+            FuncionPrincipal();
+            porcentaje();
+        }
+    })
+}
