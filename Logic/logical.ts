@@ -9,8 +9,9 @@ let AllCheck = document.getElementsByClassName('allcheck') as HTMLCollectionOf<H
 let porcentaje = () => {
     if (BarraProgreso && TextBarra && AllCheck) {
         let barraValor: number = +BarraProgreso.getAttribute('value')!
-        let aumentarValorBarra: ReturnType<typeof setTimeout> | ReturnType<typeof clearInterval>;
-        aumentarValorBarra = clearInterval(aumentarValorBarra)
+        let aumentarValorBarra: ReturnType<typeof setInterval> | undefined;
+
+        clearInterval(aumentarValorBarra);
 
         let contadorCheck: number = 0
         for (let i: number = 0; i < AllCheck.length; i++) {
@@ -18,23 +19,24 @@ let porcentaje = () => {
                 contadorCheck++
             }
         }
-        let CantidadChecked: number = Math.floor((contadorCheck / (AllCheck.length)) * 100)
-        TextBarra.textContent = CantidadChecked.toString() + '%'
+        const CheckedPorcent: number = Math.floor((contadorCheck / AllCheck.length) * 100);
+        const CheckedPorcentToNum = barraValor * CheckedPorcent / 100;
+        TextBarra.textContent = CheckedPorcent.toString() + '%'
 
-        if (barraValor < PorcentajeToNumber) {
+        if (barraValor < CheckedPorcentToNum) {
             aumentarValorBarra = setInterval(() => {
                 barraValor++
                 BarraProgreso.setAttribute('value', barraValor.toString())
-                if (barraValor == PorcentajeToNumber) {
+                if (barraValor == CheckedPorcentToNum) {
                     clearInterval(aumentarValorBarra)
                 }
             }, 100)
         }
-        else if (barraValor > PorcentajeToNumber) {
+        else if (barraValor > CheckedPorcentToNum) {
             aumentarValorBarra = setInterval(() => {
                 barraValor--
                 BarraProgreso.setAttribute('value', barraValor.toString())
-                if (barraValor == PorcentajeToNumber) {
+                if (barraValor == CheckedPorcentToNum) {
                     clearInterval(aumentarValorBarra)
                 }
             }, 100)
@@ -48,53 +50,31 @@ let porcentaje = () => {
 const FuncionPrincipal = (): void => {
     if (TextoInput && UlElement && TextoInput.value.trim() !== "") {
         const ListHtml: string = ` 
-        < li >
-            <div class="ContenedorPrincipal" >
+        <li id="proof">
+            <div class="ContenedorPrincipal">
                 <div class="check" >
-                    <input type="checkbox" id = "verificar" >
-                    <label for= "verificar" > ejemplo < /label>
-                < /div>
-            < div class= "eliminar" >
-                <button><i class= "fa-solid fa-trash" > </i> < /button>
-            < /div>
-            < /div>
-        < /li>`
-
-
-        const CrearLi = document.createElement('li')
-        UlElement.insertAdjacentElement('afterbegin', CrearLi)
-        const DivPrincipal = document.createElement('div')
-        DivPrincipal.classList.add("ContenedorPrincipal")
-        CrearLi.insertAdjacentElement('afterbegin', DivPrincipal)
-        const DivSegundario = document.createElement('div')
-        DivSegundario.classList.add("check")
-        DivPrincipal.insertAdjacentElement('afterbegin', DivSegundario)
-        const InputCheckbox = document.createElement('input')
-        InputCheckbox.type = "checkbox"
-        InputCheckbox.classList.add('allcheck')
-        InputCheckbox.setAttribute('id', contador1.toString())
-        DivSegundario.insertAdjacentElement('afterbegin', InputCheckbox)
-        const LabelInput = document.createElement('label')
-        LabelInput.setAttribute('for', contador1.toString())
-        LabelInput.textContent = TextoInput.value
-        InputCheckbox.insertAdjacentElement('afterend', LabelInput)
-        const DivSegundario2 = document.createElement('div')
-        DivSegundario2.classList.add('eliminar')
-        DivPrincipal.insertAdjacentElement('beforeend', DivSegundario2)
-        const BotonEliminar = document.createElement('button')
-        DivSegundario2.insertAdjacentElement('afterbegin', BotonEliminar)
-        const IconoBasura = document.createElement('i')
-        IconoBasura.classList.add('fa-solid')
-        IconoBasura.classList.add('fa-trash')
-        BotonEliminar.insertAdjacentElement('afterbegin', IconoBasura)
+                    <input type="checkbox" id = "verificar">
+                    <label for= "verificar" > ${TextoInput.value} </label>
+                </div>
+            <div class= "eliminar">
+                <button><i class= "fa-solid fa-trash" id="garbage"> </i> </button>
+            </div>
+            </div>
+        </li>`
+        UlElement.insertAdjacentHTML("afterbegin", ListHtml);
         TextoInput.value = ""
-        BotonEliminar.addEventListener('click', () => {
-            if (UlElement && CrearLi) {
-                UlElement.removeChild(CrearLi)
-                porcentaje()
-            }
-        })
-        InputCheckbox.addEventListener('click', porcentaje)
+        const DeleteTaskButton = document.getElementById("garbage")
+        const Task = document.getElementById("proof");
+        if (DeleteTaskButton) {
+            DeleteTaskButton.addEventListener('click', () => {
+                if (UlElement) {
+                    Task?.remove()
+                    porcentaje()
+                }
+            })
+        }
+        const InputCheckbox = document.getElementById("checkbox");
+        InputCheckbox?.addEventListener('click', porcentaje)
         contador1++
     }
 }
