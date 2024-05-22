@@ -9,7 +9,7 @@ let AllCheck = document.getElementsByClassName('allcheck') as HTMLCollectionOf<H
 let porcentaje = () => {
     if (BarraProgreso && TextBarra && AllCheck) {
         let barraValor: number = +BarraProgreso.getAttribute('value')!
-        let aumentarValorBarra: number | undefined
+        let aumentarValorBarra: ReturnType<typeof setTimeout> | ReturnType<typeof clearInterval>;
         aumentarValorBarra = clearInterval(aumentarValorBarra)
 
         let contadorCheck: number = 0
@@ -20,7 +20,7 @@ let porcentaje = () => {
         }
         let CantidadChecked: number = Math.floor((contadorCheck / (AllCheck.length)) * 100)
         TextBarra.textContent = CantidadChecked.toString() + '%'
-        let PorcentajeToNumber: number = Math.floor((contadorCheck / AllCheck.length) * 100)
+
         if (barraValor < PorcentajeToNumber) {
             aumentarValorBarra = setInterval(() => {
                 barraValor++
