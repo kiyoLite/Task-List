@@ -1,93 +1,96 @@
-const TextoInput = document.querySelector('input[type="text"]') as HTMLInputElement | null
-const BotonAnadir = document.getElementById('anexar') as HTMLButtonElement | null
-const BarraProgreso = document.querySelector('progress') as HTMLProgressElement | null
-const TextBarra = document.querySelector('p') as HTMLParagraphElement | null
-const UlElement = document.querySelector('ul') as HTMLUListElement | null
-let contador1: number = 0
-let AllCheck = document.getElementsByClassName('allcheck') as HTMLCollectionOf<HTMLInputElement>
+const Input = document.querySelector('input[type="text"]') as HTMLInputElement | null
+const AddTaskButton = document.getElementById('anexar') as HTMLButtonElement | null
+const ProgressBar = document.querySelector('progress') as HTMLProgressElement | null
+const TextPorgressBar = document.querySelector('p') as HTMLParagraphElement | null
+const TaskList = document.querySelector('ul') as HTMLUListElement | null
+// this variable is using for genere unique id to each checkbox
+let CheckboxID = 0;
+let AllCheckbox = document.getElementsByClassName('allcheck') as HTMLCollectionOf<HTMLInputElement>
 
-let porcentaje = () => {
-    if (BarraProgreso && TextBarra && AllCheck) {
-        let barraValor: number = +BarraProgreso.getAttribute('value')!
-        let aumentarValorBarra: ReturnType<typeof setInterval> | undefined;
 
-        clearInterval(aumentarValorBarra);
+let Porcent = () => {
+    if (ProgressBar && TextPorgressBar && AllCheckbox) {
+        let ProgressbarValue: number = +ProgressBar.getAttribute('value')!
+        let IncreaseProgressBar: ReturnType<typeof setInterval> | undefined;
 
-        let contadorCheck: number = 0
-        for (let i: number = 0; i < AllCheck.length; i++) {
-            if (AllCheck[i].checked === true) {
-                contadorCheck++
+        clearInterval(IncreaseProgressBar);
+
+        let CheckboxesChecked: number = 0
+        for (let i: number = 0; i < AllCheckbox.length; i++) {
+            if (AllCheckbox[i].checked === true) {
+                CheckboxesChecked++
             }
         }
-        const CheckedPorcent: number = Math.floor((contadorCheck / AllCheck.length) * 100);
+        const CheckedPorcent: number = Math.floor((CheckboxesChecked / AllCheckbox.length) * 100);
         // multiply  CheckedPorcent for "100" because is the max value from progress element
         const CheckedPorcentToNum = 100 * CheckedPorcent / 100;
-        TextBarra.textContent = CheckedPorcent.toString() + '%'
+        TextPorgressBar.textContent = CheckedPorcent.toString() + '%'
 
-        if (barraValor < CheckedPorcentToNum) {
-            aumentarValorBarra = setInterval(() => {
-                barraValor++
-                BarraProgreso.setAttribute('value', barraValor.toString())
-                if (barraValor == CheckedPorcentToNum) {
-                    clearInterval(aumentarValorBarra)
+        if (ProgressbarValue < CheckedPorcentToNum) {
+            IncreaseProgressBar = setInterval(() => {
+                ProgressbarValue++
+                ProgressBar.setAttribute('value', ProgressbarValue.toString())
+                if (ProgressbarValue == CheckedPorcentToNum) {
+                    clearInterval(IncreaseProgressBar)
                 }
             }, 20)
         }
-        else if (barraValor > CheckedPorcentToNum) {
-            aumentarValorBarra = setInterval(() => {
-                barraValor--
-                BarraProgreso.setAttribute('value', barraValor.toString())
-                if (barraValor == CheckedPorcentToNum) {
-                    clearInterval(aumentarValorBarra)
+        else if (ProgressbarValue > CheckedPorcentToNum) {
+            IncreaseProgressBar = setInterval(() => {
+                ProgressbarValue--
+                ProgressBar.setAttribute('value', ProgressbarValue.toString())
+                if (ProgressbarValue == CheckedPorcentToNum) {
+                    clearInterval(IncreaseProgressBar)
                 }
             }, 20)
         }
         else {
-            clearInterval(aumentarValorBarra)
+            clearInterval(IncreaseProgressBar)
         }
     }
 }
 
-const FuncionPrincipal = (): void => {
-    if (TextoInput && UlElement && TextoInput.value.trim() !== "") {
+const MainFunction = (): void => {
+    if (Input && TaskList && Input.value.trim() !== "") {
         const ListHtml: string = ` 
         <li id="proof">
             <div class="ContenedorPrincipal">
                 <div class="check" >
-                    <input type="checkbox" id = "verificar">
-                    <label for= "verificar" > ${TextoInput.value} </label>
+                    <input type="checkbox" id = ${CheckboxID.toString()}>
+                    <label for= ${CheckboxID.toString()} > ${Input.value} </label>
                 </div>
             <div class= "eliminar">
                 <button><i class= "fa-solid fa-trash" id="garbage"> </i> </button>
             </div>
             </div>
         </li>`
-        UlElement.insertAdjacentHTML("afterbegin", ListHtml);
-        TextoInput.value = ""
+        TaskList.insertAdjacentHTML("afterbegin", ListHtml);
+        Input.value = ""
         const DeleteTaskButton = document.getElementById("garbage")
         const Task = document.getElementById("proof");
         if (DeleteTaskButton) {
             DeleteTaskButton.addEventListener('click', () => {
-                if (UlElement) {
+                if (TaskList) {
                     Task?.remove()
-                    porcentaje()
+                    Porcent()
                 }
             })
         }
-        const InputCheckbox = document.getElementById("checkbox");
-        InputCheckbox?.addEventListener('click', porcentaje)
-        contador1++
+        const InputCheckbox = document.getElementById(CheckboxID.toString());
+        InputCheckbox?.addEventListener('click', Porcent)
+        CheckboxID++
+
     }
 }
 
-if (BotonAnadir && TextoInput) {
-    BotonAnadir.addEventListener('click', FuncionPrincipal)
-    BotonAnadir.addEventListener('click', porcentaje)
+if (AddTaskButton && Input) {
+    AddTaskButton.addEventListener('click', MainFunction)
+    AddTaskButton.addEventListener('click', Porcent)
 
-    TextoInput.addEventListener('keydown', (e) => {
+    Input.addEventListener('keydown', (e) => {
         if (e.key == "Enter") {
-            FuncionPrincipal();
-            porcentaje();
+            MainFunction();
+            Porcent();
         }
     })
 }
