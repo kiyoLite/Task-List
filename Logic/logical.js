@@ -18,7 +18,8 @@ let porcentaje = () => {
             }
         }
         const CheckedPorcent = Math.floor((contadorCheck / AllCheck.length) * 100);
-        const CheckedPorcentToNum = barraValor * CheckedPorcent / 100;
+        // multiply  CheckedPorcent for "100" because is the max value from progress element
+        const CheckedPorcentToNum = 100 * CheckedPorcent / 100;
         TextBarra.textContent = CheckedPorcent.toString() + '%';
         if (barraValor < CheckedPorcentToNum) {
             aumentarValorBarra = setInterval(() => {
@@ -27,7 +28,7 @@ let porcentaje = () => {
                 if (barraValor == CheckedPorcentToNum) {
                     clearInterval(aumentarValorBarra);
                 }
-            }, 100);
+            }, 20);
         }
         else if (barraValor > CheckedPorcentToNum) {
             aumentarValorBarra = setInterval(() => {
@@ -36,7 +37,7 @@ let porcentaje = () => {
                 if (barraValor == CheckedPorcentToNum) {
                     clearInterval(aumentarValorBarra);
                 }
-            }, 100);
+            }, 20);
         }
         else {
             clearInterval(aumentarValorBarra);
