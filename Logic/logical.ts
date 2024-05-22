@@ -47,6 +47,20 @@ let porcentaje = () => {
 
 const FuncionPrincipal = (): void => {
     if (TextoInput && UlElement && TextoInput.value.trim() !== "") {
+        const ListHtml: string = ` 
+        < li >
+            <div class="ContenedorPrincipal" >
+                <div class="check" >
+                    <input type="checkbox" id = "verificar" >
+                    <label for= "verificar" > ejemplo < /label>
+                < /div>
+            < div class= "eliminar" >
+                <button><i class= "fa-solid fa-trash" > </i> < /button>
+            < /div>
+            < /div>
+        < /li>`
+
+
         const CrearLi = document.createElement('li')
         UlElement.insertAdjacentElement('afterbegin', CrearLi)
         const DivPrincipal = document.createElement('div')
