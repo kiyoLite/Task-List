@@ -11,16 +11,17 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:ital@1&family=Mukta:wght@200&family=Pacifico&display=swap"
         rel="stylesheet">
+    <link rel="icon" href="data:;base64,=">
 </head>
 
 <body>
     <main>
         <h1>📝TASK LIST</h1>
         <section id="anadir">
-            <input type="text" maxlength="35 " placeholder="hacer la compra">
-            <button id="anexar">
-                <i class="fa-solid fa-arrow-turn-down"></i>
-            </button>
+            <form id="TaskForm">
+                <input type="text" maxlength="35 " placeholder="hacer la compra">
+                <input type="image" id="Submit" src="./images/reply_24dp_FILL0_wght400_GRAD0_opsz24.svg">
+            </form>
         </section>
 
         <section id="lista">
@@ -46,8 +47,9 @@
             <progress max="100" value="0"></progress>
         </section>
 
+
     </main>
-    <script src="logical.js"></script>
+    <script src="./gui.js" type="module"></script>
 </body>
 
 </html>
