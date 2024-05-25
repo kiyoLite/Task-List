@@ -1,6 +1,7 @@
-import { Porcent } from "./CalculatePorcent.js"
+
+import { UpdateProgressbar } from "./UpdateProgressBar.js"
 const DeleteTask = function (Task: HTMLLIElement | null) {
     Task?.remove()
-    Porcent()
+    UpdateProgressbar();
 }
 export { DeleteTask }
