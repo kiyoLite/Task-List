@@ -1,5 +1,6 @@
-let AllCheckbox = document.getElementsByClassName('allcheck');
+let AllCheckbox = document.getElementsByClassName('allcheckbox');
 const ProgressBar = document.querySelector('progress');
+let CheckedPorcent = -1;
 let Porcent = () => {
     if (ProgressBar && AllCheckbox) {
         let ProgressbarValue = +ProgressBar.getAttribute('value');
@@ -9,7 +10,8 @@ let Porcent = () => {
                 CheckboxesChecked++;
             }
         }
-        const CheckedPorcent = Math.floor((CheckboxesChecked / AllCheckbox.length) * 100);
+        CheckedPorcent = Math.floor((CheckboxesChecked / AllCheckbox.length) * 100);
     }
+    return CheckedPorcent;
 };
 export { Porcent };

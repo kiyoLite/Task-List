@@ -1,4 +1,4 @@
-let AllCheckbox = document.getElementsByClassName('allcheck') as HTMLCollectionOf<HTMLInputElement>
+let AllCheckbox = document.getElementsByClassName('allcheckbox') as HTMLCollectionOf<HTMLInputElement>
 const ProgressBar = document.querySelector('progress') as HTMLProgressElement | null
 let CheckedPorcent = -1;
 let Porcent = () => {
